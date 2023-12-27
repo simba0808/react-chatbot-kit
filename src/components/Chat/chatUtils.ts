@@ -43,11 +43,7 @@ export const createChatBotMessage = (
   message: string,
   options: IMessageOptions
 ) => {
-  return {
-    ...createChatMessage(message, 'bot'),
-    ...options,
-    loading: true,
-  };
+  return { ...createChatMessage(message, 'bot'), ...options };
 };
 
 export const createCustomMessage = (

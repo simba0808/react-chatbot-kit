@@ -9,7 +9,7 @@ export declare const createChatMessage: (message: string, type: string) => {
     id: number;
 };
 export declare const createChatBotMessage: (message: string, options: IMessageOptions) => {
-    loading: boolean;
+    loading?: boolean;
     widget?: string;
     delay?: number;
     payload?: any;

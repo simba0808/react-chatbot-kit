@@ -23,7 +23,6 @@ const ChatbotMessage = ({
   message,
   withAvatar = true,
   loading,
-  messages,
   customComponents,
   setState,
   customStyles,
@@ -31,34 +30,6 @@ const ChatbotMessage = ({
   id,
 }: IChatbotMessageProps) => {
   const [show, toggleShow] = useState(false);
-
-  useEffect(() => {
-    let timeoutId: any;
-    const disableLoading = (
-      messages: any[],
-      setState: React.Dispatch<React.SetStateAction<any>>
-    ) => {
-      let defaultDisableTime = 750;
-      if (delay) defaultDisableTime += delay;
-
-      timeoutId = setTimeout(() => {
-        const newMessages = [...messages].map(message => {
-          if (message.id === id) {
-            return {...message, loading: false, delay: undefined};
-          }
-
-          return message;
-        });
-
-        setState((state: any) => ({...state, messages: newMessages}));
-      }, defaultDisableTime);
-    };
-
-    disableLoading(messages, setState);
-    return () => {
-      clearTimeout(timeoutId);
-    };
-  }, [delay, id]);
 
   useEffect(() => {
     if (delay) {
@@ -75,6 +46,8 @@ const ChatbotMessage = ({
     chatBoxCustomStyles.backgroundColor = customStyles.backgroundColor;
     arrowCustomStyles.borderRightColor = customStyles.backgroundColor;
   }
+
+  const loaderComponent = callIfExists(customComponents?.loader) ?? <Loader/>;
 
   return (
     <ConditionallyRender
@@ -96,7 +69,9 @@ const ChatbotMessage = ({
             condition={!!customComponents?.botChatMessage}
             show={callIfExists(customComponents?.botChatMessage, {
               message,
-              loader: <Loader />,
+              loading,
+              setState,
+              loader: loaderComponent,
             })}
             elseShow={
               <div
@@ -105,7 +80,7 @@ const ChatbotMessage = ({
               >
                 <ConditionallyRender
                   condition={loading}
-                  show={<Loader />}
+                  show={loaderComponent}
                   elseShow={<span>{message}</span>}
                 />
                 <ConditionallyRender
