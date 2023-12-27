@@ -295,7 +295,6 @@ const Chat = ({
           />
 
           {renderMessages()}
-          <div style={{ paddingBottom: '15px' }} />
         </div>
 
         <div className="react-chatbot-kit-chat-input-container">
